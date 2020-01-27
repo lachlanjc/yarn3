@@ -1,0 +1,102 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Yarn 3.0</title>
+    <script src="https://cdn.jsdelivr.net/npm/p5@0.10.2/lib/p5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/eduardolundgren/tracking.js@1.1.3/build/tracking-min.js"></script>
+    <style>
+      body {
+        font-family: system-ui;
+        margin: 0;
+        overflow: hidden;
+      }
+      video,
+      canvas {
+        transform: scaleX(-1);
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      canvas {
+        z-index: 9;
+      }
+      p {
+        background: white;
+        text-align: right;
+        z-index: 999;
+        position: absolute;
+        top: 0;
+        right: 1rem;
+      }
+    </style>
+  </head>
+
+  <body>
+    <p id="packages"></p>
+    <script>
+      let yarns = [
+        { color: 'cyan', package: 'react' },
+        { color: 'magenta', package: 'lodash' },
+        { color: 'yellow', package: 'chalk' }
+      ]
+
+      let activePackages = () =>
+        new Set(yarns.filter(y => y.active).map(y => y.package)) || []
+
+      const printPackages = pkg =>
+        fetch(`/packages/${pkg.join(',')}`)
+          .then(res => res.text())
+          .then(text => console.log(text))
+
+      let colors
+      let capture
+      let trackingData = []
+
+      function setup() {
+        createCanvas(windowWidth, windowHeight)
+
+        capture = createCapture(VIDEO)
+        capture.position(0, 0)
+        capture.size(width, width * 0.75)
+        capture.id('camera')
+
+        colors = new tracking.ColorTracker(yarns.map(yarn => yarn.color))
+        tracking.track('#camera', colors)
+        colors.on('track', ({ data }) => {
+          trackingData = data
+        })
+      }
+
+      function draw() {
+        yarns.forEach(y => {
+          y.active = false
+        })
+        if (trackingData.length > 0) {
+          const colors = trackingData.map(item => item.color)
+          yarns.forEach(y => {
+            y.active = colors.includes(y.color)
+          })
+          noFill()
+          for (let i = 0; i < trackingData.length; i++) {
+            stroke(trackingData[i].color)
+            rect(
+              trackingData[i].x,
+              trackingData[i].y,
+              trackingData[i].width,
+              trackingData[i].height
+            )
+          }
+        }
+      }
+
+      setInterval(() => {
+        const active = [...activePackages()]
+        document.getElementById('packages').innerHTML = active.join(', ')
+        if (active.length > 0) {
+          console.log(active)
+          printPackages(active)
+        }
+      }, 5000)
+    </script>
+  </body>
+</html>

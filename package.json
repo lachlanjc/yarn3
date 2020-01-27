@@ -1,0 +1,19 @@
+{
+  "name": "yarn",
+  "version": "3.0",
+  "description": "Built at the stupid hackathon @ NYU, 2020",
+  "license": "MIT",
+  "author": "Lachlan Campbell (https://lachlanjc.me)",
+  "repository": "lachlanjc/yarn3",
+  "private": true,
+  "scripts": {
+    "start": "micro index.js"
+  },
+  "dependencies": {
+    "isomorphic-unfetch": "^3.0.0",
+    "micro": "^9.3.4",
+    "microrouter": "^3.1.3",
+    "node-native-printer": "^1.0.0-beta.5",
+    "prettier": "^1.19.1"
+  }
+}

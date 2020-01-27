@@ -3,6 +3,8 @@
 The new version of the [Yarn package manager](https://yarnpkg.com) for JavaScript is here!
 Now you can download the most popular packages right on your desk.
 
+[**▶️ Watch the demo!**](https://twitter.com/lachlanjc/status/1221794248821018624?s=12)
+
 ## Usage
 
 1. Place the ball of yarn for the package you’d like (`react` is cyan, `lodash` is pink, `chalk` is yellow, etc) in front of your computer.
